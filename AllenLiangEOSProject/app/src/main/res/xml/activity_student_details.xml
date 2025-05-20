@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content">
+
+        <TextView android:id="@+id/tvStudentId" android:textSize="18sp" android:textStyle="bold"/>
+        <TextView android:id="@+id/tvAge"/>
+        <TextView android:id="@+id/tvGender"/>
+        <TextView android:id="@+id/tvStudyHours"/>
+        <TextView android:id="@+id/tvAssignmentCompletion"/>
+        <TextView android:id="@+id/tvExamScore"/>
+        <TextView android:id="@+id/tvCorrelation" android:textStyle="italic" android:layout_marginTop="16dp"/>
+
+    </LinearLayout>
+</ScrollView>
