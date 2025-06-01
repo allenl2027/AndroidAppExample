@@ -15,7 +15,6 @@ public class StudentDetailActivity extends AppCompatActivity {
     private TextView tvStudentId, tvAge, tvGender, tvStudyHours, tvAssignmentCompletionRate,
             tvExamScore, tvAttendanceRate, tvCorrelation, tvCorrelationInterpretation;
     private Button btnBack;
-
     private CSVDataManager dataManager;
     private HashMap<Student, Integer> studentsMap;
 
