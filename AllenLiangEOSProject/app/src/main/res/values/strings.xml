@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Allen Liang - EOS Project</string>
+    <string name="show_learning_style_chart">Show Learning Style Chart</string>
+    <string name="top_10_performers">Top 10 Performers</string>
+</resources>
