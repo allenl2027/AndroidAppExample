@@ -32,7 +32,7 @@ public class CSVDataManager {
         CSVReader csvReader = null;
 
         try {
-            inputStream = assets.open("students.csv"); // Use your actual CSV file name
+            inputStream = assets.open("student_performance_large_dataset.csv"); // Use your actual CSV file name
             inputStreamReader = new InputStreamReader(inputStream);
             csvReader = new CSVReader(inputStreamReader);
 
