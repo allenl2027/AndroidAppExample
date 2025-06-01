@@ -42,5 +42,4 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation(libs.opencsv)
     implementation(libs.mpandroidchart)
-
 }

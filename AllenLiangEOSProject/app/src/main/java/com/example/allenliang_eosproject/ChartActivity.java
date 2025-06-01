@@ -1,107 +1,101 @@
 package com.example.allenliang_eosproject;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.opencsv.CSVReader;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 public class ChartActivity extends AppCompatActivity {
 
-    private BarChart barChart;
-    private Button btnBack;
-    private CSVDataManager dataManager;
+    BarChart barChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
 
-        barChart = findViewById(R.id.barChart);
-        btnBack = findViewById(R.id.btnBackToHome);
-        dataManager = new CSVDataManager(this);
+        barChart = findViewById(R.id.barChart_view);
 
-        setupChart();
-        loadChartData();
+        // Parse CSV and get averages
+        Map<String, Float> averages = getAverageExamScoresByLearningStyle(this);
 
-        btnBack.setOnClickListener(v -> finish());
-    }
+        // Prepare data entries and labels
+        ArrayList<BarEntry> entries = getBarEntries(averages);
+        ArrayList<String> labels = getLearningStyles(averages);
 
-    private void setupChart() {
-        barChart.getDescription().setEnabled(false);
-        barChart.setDrawBarShadow(false);
-        barChart.setDrawValueAboveBar(true);
-        barChart.setMaxVisibleValueCount(60);
-        barChart.setPinchZoom(false);
-        barChart.setDrawGridBackground(false);
-
-        XAxis xAxis = barChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(false);
-        xAxis.setGranularity(1f);
-        xAxis.setLabelCount(4);
-
-        barChart.getAxisRight().setEnabled(false);
-
-        Legend legend = barChart.getLegend();
-        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        legend.setDrawInside(false);
-        legend.setForm(Legend.LegendForm.SQUARE);
-        legend.setFormSize(9f);
-        legend.setTextSize(11f);
-        legend.setXEntrySpace(4f);
-    }
-
-    private void loadChartData() {
-        HashMap<Student, Integer> studentsMap = dataManager.loadStudents();
-        HashMap<String, Float> averages = dataManager.calculateAverageScoresByLearningStyle(studentsMap);
-
-        List<BarEntry> entries = new ArrayList<>();
-        List<String> labels = new ArrayList<>();
-        List<Integer> colors = new ArrayList<>();
-
-        String[] learningStyles = {"Visual", "Auditory", "Reading/Writing", "Kinesthetic"};
-        int[] styleColors = {
-                Color.rgb(64, 89, 128),   // Visual - Blue
-                Color.rgb(149, 165, 124), // Auditory - Green
-                Color.rgb(217, 80, 138),  // Reading/Writing - Pink
-                Color.rgb(254, 149, 7)    // Kinesthetic - Orange
-        };
-
-        for (int i = 0; i < learningStyles.length; i++) {
-            String style = learningStyles[i];
-            float avgScore = averages.containsKey(style) ? averages.get(style) : 0f;
-            entries.add(new BarEntry(i, avgScore));
-            labels.add(style);
-            colors.add(styleColors[i]);
-        }
-
-        BarDataSet dataSet = new BarDataSet(entries, "Average Exam Scores by Learning Style");
-        dataSet.setColors(colors);
-        dataSet.setValueTextColor(Color.BLACK);
+        // Setup BarDataSet and BarData
+        BarDataSet dataSet = new BarDataSet(entries, "Avg Exam Score by Learning Style");
+        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         dataSet.setValueTextSize(12f);
 
-        BarData data = new BarData(dataSet);
-        data.setBarWidth(0.9f);
+        BarData barData = new BarData(dataSet);
+        barChart.setData(barData);
 
-        barChart.setData(data);
-        barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
-        barChart.invalidate();
-        barChart.animateY(1400);
+        // Configure X-axis labels
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
+        xAxis.setGranularity(1f);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+        barChart.getAxisRight().setEnabled(false); // Optional: disable right Y-axis
+        barChart.getDescription().setEnabled(false); // Optional: remove description
+
+        barChart.invalidate(); // refresh
+    }
+
+    private ArrayList<BarEntry> getBarEntries(Map<String, Float> averages) {
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        int i = 0;
+        for (Map.Entry<String, Float> entry : averages.entrySet()) {
+            entries.add(new BarEntry(i++, entry.getValue()));
+        }
+        return entries;
+    }
+    private ArrayList<String> getLearningStyles(Map<String, Float> averages) {
+        return new ArrayList<>(averages.keySet());
+    }
+    private Map<String, Float> getAverageExamScoresByLearningStyle(Context context) {
+        Map<String, Float> averages = new HashMap<>();
+        Map<String, Integer> counts = new HashMap<>();
+        Map<String, Float> totals = new HashMap<>();
+
+        try {
+            InputStream is = context.getAssets().open("students.csv");
+            CSVReader reader = new CSVReader(new InputStreamReader(is));
+            String[] nextLine;
+            reader.readNext(); // Skip header
+
+            while ((nextLine = reader.readNext()) != null) {
+                String style = nextLine[4]; // Preferred Learning Style column
+                float score = Float.parseFloat(nextLine[8]); // Exam Score (%) column
+
+                totals.put(style, totals.getOrDefault(style, 0f) + score);
+                counts.put(style, counts.getOrDefault(style, 0) + 1);
+            }
+            reader.close();
+
+            for (String style : totals.keySet()) {
+                averages.put(style, totals.get(style) / counts.get(style));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return averages;
     }
 }
-
