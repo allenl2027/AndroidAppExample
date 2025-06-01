@@ -1,43 +1,45 @@
 package com.example.allenliang_eosproject;
-import android.content.Context;
-import android.content.Intent;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.HashMap;
+
 import java.util.List;
 
 public class TopPerformersAdapter extends RecyclerView.Adapter<TopPerformersAdapter.ViewHolder> {
 
-    private List<Student> students;
-    private HashMap<Student, Integer> rankMap;
+    public interface OnItemClickListener {
+        void onItemClick(Student student);
+    }
 
-    public TopPerformersAdapter(List<Student> students, HashMap<Student, Integer> rankMap) {
+    private List<Student> students;
+    private OnItemClickListener listener;
+
+    public TopPerformersAdapter(List<Student> students, OnItemClickListener listener) {
         this.students = students;
-        this.rankMap = rankMap;
+        this.listener = listener;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_2, parent, false);
+    public TopPerformersAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_student, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Student s = students.get(position);
-        holder.tv1.setText((rankMap.get(s)) + ". ID: " + s.getId());
-        holder.tv2.setText("Exam Score: " + s.getExamScore());
-        holder.itemView.setOnClickListener(v -> {
-            Context context = v.getContext();
-            Intent intent = new Intent(context, StudentDetailsActivity.class);
-            intent.putExtra("studentId", s.getId());
-            context.startActivity(intent);
-        });
+    public void onBindViewHolder(@NonNull TopPerformersAdapter.ViewHolder holder, int position) {
+        Student student = students.get(position);
+        holder.tvRank.setText("#" + (position + 1));
+        holder.tvStudentId.setText("ID: " + student.getId());
+        holder.tvExamScore.setText("Score: " + student.getExamScore());
+        holder.tvLearningStyle.setText(student.getPreferredLearningStyle());
+
+        holder.itemView.setOnClickListener(v -> listener.onItemClick(student));
     }
 
     @Override
@@ -45,12 +47,16 @@ public class TopPerformersAdapter extends RecyclerView.Adapter<TopPerformersAdap
         return students.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv1, tv2;
-        ViewHolder(@NonNull View itemView) {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tvRank, tvStudentId, tvExamScore, tvLearningStyle;
+
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tv1 = itemView.findViewById(android.R.id.text1);
-            tv2 = itemView.findViewById(android.R.id.text2);
+            tvRank = itemView.findViewById(R.id.tvRank);
+            tvStudentId = itemView.findViewById(R.id.tvStudentId);
+            tvExamScore = itemView.findViewById(R.id.tvExamScore);
+            tvLearningStyle = itemView.findViewById(R.id.tvLearningStyle);
         }
     }
 }
+
