@@ -33,6 +33,7 @@ public class CSVDataManager {
 
         try {
             inputStream = assets.open("student_performance_large_dataset.csv"); // Use your actual CSV file name
+
             inputStreamReader = new InputStreamReader(inputStream);
             csvReader = new CSVReader(inputStreamReader);
 
@@ -47,16 +48,16 @@ public class CSVDataManager {
                 }
                 if (nextRecord.length < 9) continue;
 
-                // Logging the data (optional, as in the screenshot)
-                Log.d("CSVDataManager", java.util.Arrays.toString(nextRecord));
-
                 Student student = new Student(
-                        nextRecord[0], Integer.parseInt(nextRecord[1]),
-                        nextRecord[2], Integer.parseInt(nextRecord[3]),
-                        nextRecord[4], Integer.parseInt(nextRecord[5]),
-                        Integer.parseInt(nextRecord[6]),
+                        nextRecord[0],
+                        Integer.parseInt(nextRecord[1]),
+                        nextRecord[2],
+                        Integer.parseInt(nextRecord[3]),
+                        nextRecord[4],
+                        Integer.parseInt(nextRecord[5]),
                         Integer.parseInt(nextRecord[7]),
-                        Integer.parseInt(nextRecord[8])
+                        Integer.parseInt(nextRecord[8]),
+                        Integer.parseInt(nextRecord[9])
                 );
                 studentsList.add(student);
             }
@@ -96,7 +97,7 @@ public class CSVDataManager {
         Collections.sort(sortedStudents, new Comparator<Student>() {
             @Override
             public int compare(Student s1, Student s2) {
-                return Integer.compare(s2.getExamScore(), s1.getExamScore());
+                return Float.compare(s2.getExamScore(), s1.getExamScore());
             }
         });
         return sortedStudents.subList(0, Math.min(count, sortedStudents.size()));

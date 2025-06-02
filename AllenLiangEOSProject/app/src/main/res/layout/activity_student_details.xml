@@ -18,16 +18,70 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"/>
 
-        <TextView android:id="@+id/tvStudentId" android:text="Student ID:" android:textSize="16sp" android:layout_marginBottom="8dp"/>
-        <TextView android:id="@+id/tvAge" android:text="Age:" android:textSize="16sp" android:layout_marginBottom="8dp"/>
-        <TextView android:id="@+id/tvGender" android:text="Gender:" android:textSize="16sp" android:layout_marginBottom="8dp"/>
-        <TextView android:id="@+id/tvStudyHours" android:text="Study Hours/Week:" android:textSize="16sp" android:layout_marginBottom="8dp"/>
-        <TextView android:id="@+id/tvAssignmentCompletionRate" android:text="Assignment Completion Rate:" android:textSize="16sp" android:layout_marginBottom="8dp"/>
-        <TextView android:id="@+id/tvExamScore" android:text="Exam Score:" android:textSize="16sp" android:layout_marginBottom="8dp"/>
-        <TextView android:id="@+id/tvAttendanceRate" android:text="Attendance Rate:" android:textSize="16sp" android:layout_marginBottom="8dp"/>
+        <TextView
+            android:id="@+id/tvStudentId"
+            android:text="Student ID:"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-        <TextView android:id="@+id/tvCorrelation" android:text="Correlation:" android:textSize="16sp" android:textStyle="bold" android:layout_marginTop="20dp"/>
-        <TextView android:id="@+id/tvCorrelationInterpretation" android:text="Interpretation:" android:textSize="16sp" android:textStyle="italic" android:layout_marginBottom="20dp"/>
+        <TextView
+            android:id="@+id/tvAge"
+            android:text="Age:"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvGender"
+            android:text="Gender:"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvStudyHours"
+            android:text="Study Hours/Week:"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvAssignmentCompletionRate"
+            android:text="Assignment Completion Rate:"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvExamScore"
+            android:text="Exam Score:"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvAttendanceRate"
+            android:text="Attendance Rate:"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvCorrelation"
+            android:text="Correlation:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <Button
             android:id="@+id/btnBackToHome"

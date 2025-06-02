@@ -17,6 +17,7 @@ public class StudentDetailActivity extends AppCompatActivity {
     private Button btnBack;
     private CSVDataManager dataManager;
     private HashMap<Student, Integer> studentsMap;
+    private Student currentStudent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,15 +32,14 @@ public class StudentDetailActivity extends AppCompatActivity {
         tvExamScore = findViewById(R.id.tvExamScore);
         tvAttendanceRate = findViewById(R.id.tvAttendanceRate);
         tvCorrelation = findViewById(R.id.tvCorrelation);
-        tvCorrelationInterpretation = findViewById(R.id.tvCorrelationInterpretation);
         btnBack = findViewById(R.id.btnBackToHome);
 
         dataManager = new CSVDataManager(this);
         studentsMap = dataManager.loadStudents();
 
-        Student student = (Student) getIntent().getSerializableExtra("student");
-        if (student != null) {
-            displayStudentDetails(student);
+        currentStudent = (Student) getIntent().getSerializableExtra("student");
+        if (currentStudent != null) {
+            displayStudentDetails(currentStudent);
             calculateAndDisplayCorrelation();
         }
 
@@ -58,17 +58,34 @@ public class StudentDetailActivity extends AppCompatActivity {
 
     private void calculateAndDisplayCorrelation() {
         List<Student> allStudents = new ArrayList<>(studentsMap.keySet());
-        double corr = Student.calculateCorrelation(allStudents);
-        tvCorrelation.setText(String.format("Correlation (Study Hours vs Exam Score): %.2f", corr));
+        if (allStudents.size() < 2) {
+            tvCorrelation.setText("Correlation: Not enough data");
+            return;
+        }
 
-        String interpretation;
-        if (corr > 0.7) interpretation = "Strong positive correlation";
-        else if (corr > 0.3) interpretation = "Moderate positive correlation";
-        else if (corr > -0.3) interpretation = "Weak or no correlation";
-        else if (corr > -0.7) interpretation = "Moderate negative correlation";
-        else interpretation = "Strong negative correlation";
+        double meanStudyHours = allStudents.stream()
+                .mapToDouble(Student::getStudyHoursPerWeek)
+                .average().orElse(0.0);
 
-        tvCorrelationInterpretation.setText(interpretation);
+        double meanExamScore = allStudents.stream()
+                .mapToDouble(Student::getExamScore)
+                .average().orElse(0.0);
+
+        double numerator = 0, sumSquaredDiffX = 0, sumSquaredDiffY = 0;
+
+        for (Student student : allStudents) {
+            double diffX = student.getStudyHoursPerWeek() - meanStudyHours;
+            double diffY = student.getExamScore() - meanExamScore;
+            numerator += diffX * diffY;
+            sumSquaredDiffX += diffX * diffX;
+            sumSquaredDiffY += diffY * diffY;
+        }
+
+        double denominator = Math.sqrt(sumSquaredDiffX * sumSquaredDiffY);
+        double correlation = denominator != 0 ? numerator / denominator : 0;
+
+        tvCorrelation.setText(String.format("Correlation (Study Hours vs Exam Score): %.3f", correlation));
     }
 }
+
 

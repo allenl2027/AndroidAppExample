@@ -61,9 +61,17 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Please enter a Student ID", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Student student = dataManager.searchStudentById(studentsMap, id);
-                if (student != null) {
-                    openStudentDetails(student);
+
+                Student foundStudent = null;
+                for (Student student : studentsMap.keySet()) {
+                    if (student.getId().equalsIgnoreCase(id)) {
+                        foundStudent = student;
+                        break;
+                    }
+                }
+
+                if (foundStudent != null) {
+                    openStudentDetails(foundStudent);
                 } else {
                     Toast.makeText(MainActivity.this, "Student not found", Toast.LENGTH_SHORT).show();
                 }
