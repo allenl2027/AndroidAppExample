@@ -23,7 +23,7 @@ public class TopPerformersAdapter extends RecyclerView.Adapter<TopPerformersAdap
         this.students = students;
         this.listener = listener;
     }
-
+    //Line 27-60 was written by Perplexity AI
     @NonNull
     @Override
     public TopPerformersAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

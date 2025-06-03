@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         });
         recyclerView.setAdapter(adapter);
     }
-
+    //Line 55-80 was written by Perplexity AI
     private void setupSearchButton() {
         btnSearchStudent.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -45,7 +45,7 @@ public class SimpleBarChartView extends View {
         this.data = data;
         invalidate(); // redraw view
     }
-
+    //Line 49-92 was written by Perplexity AI
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);

@@ -91,7 +91,7 @@ public class CSVDataManager {
     }
 
 
-    // Get top N performers
+    //Line 95-114 was written by Perplexity AI
     public List<Student> getTopPerformers(HashMap<Student, Integer> studentsMap, int count) {
         List<Student> sortedStudents = new ArrayList<>(studentsMap.keySet());
         Collections.sort(sortedStudents, new Comparator<Student>() {
