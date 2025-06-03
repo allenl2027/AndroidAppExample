@@ -38,30 +38,5 @@ public class Student implements Serializable {
     public int getAssignmentCompletionRate() { return assignmentCompletionRate; }
     public int getExamScore() { return examScore; }
     public int getAttendanceRate() { return attendanceRate; }
-
-    // Calculate Pearson correlation coefficient between studyHoursPerWeek and examScore for a list of students
-    public static double calculateCorrelation(List<Student> students) {
-        int n = students.size();
-        if (n < 2) return 0.0;
-
-        double sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
-
-        for (Student s : students) {
-            double x = s.getStudyHoursPerWeek();
-            double y = s.getExamScore();
-            sumX += x;
-            sumY += y;
-            sumXY += x * y;
-            sumX2 += x * x;
-            sumY2 += y * y;
-        }
-
-        double numerator = n * sumXY - sumX * sumY;
-        double denominator = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
-
-        if (denominator == 0) return 0.0;
-
-        return numerator / denominator;
-    }
 }
 

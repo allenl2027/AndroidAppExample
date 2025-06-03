@@ -38,7 +38,7 @@ public class ChartActivity extends AppCompatActivity {
 
         btnBack.setOnClickListener(v -> finish());
     }
-
+    //Line 41-105 was written by Perplexity AI
     private void setupChart() {
         barChart.getDescription().setEnabled(false);
         barChart.setDrawBarShadow(false);
